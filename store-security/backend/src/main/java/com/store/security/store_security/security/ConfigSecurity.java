@@ -3,6 +3,8 @@ package com.store.security.store_security.security;
 import com.store.security.store_security.exceptionhandle.CustomAccessDeniedHandler;
 import com.store.security.store_security.exceptionhandle.CustomAuthenticationEntryPoint;
 import com.store.security.store_security.filter.CsrfCustomFilter;
+import com.store.security.store_security.filter.JwtGenertorFilter;
+import com.store.security.store_security.filter.JwtValidatorFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,7 +53,7 @@ public class ConfigSecurity {
         http.csrf(csrf->csrf.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
                 .ignoringRequestMatchers("/api/auth/registration","/h2-console/**","/api/auth/logout")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()));
-        http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
+        http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/article/addArticle",
                                         "/api/article/addArticle/**",
@@ -79,6 +81,8 @@ public class ConfigSecurity {
                                        ).permitAll());
         //set custom filter
         http.addFilterAfter(new CsrfCustomFilter(), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new JwtGenertorFilter(),BasicAuthenticationFilter.class);
+        http.addFilterAfter(new JwtValidatorFilter(),BasicAuthenticationFilter.class);
 
 
         http.cors(cors->cors.configurationSource(
@@ -97,7 +101,7 @@ public class ConfigSecurity {
                 }
         ));
         http.logout(logout->
-                logout.deleteCookies("JSESSIONID","CSRF-TOKEN")
+                logout.deleteCookies("CSRF-TOKEN")
                         .logoutUrl("/api/auth/logout")
                         .invalidateHttpSession(true).permitAll()
                         .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
