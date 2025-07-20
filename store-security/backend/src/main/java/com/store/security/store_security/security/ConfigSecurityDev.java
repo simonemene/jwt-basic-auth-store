@@ -3,6 +3,8 @@ package com.store.security.store_security.security;
 import com.store.security.store_security.exceptionhandle.CustomAccessDeniedHandler;
 import com.store.security.store_security.exceptionhandle.CustomAuthenticationEntryPoint;
 import com.store.security.store_security.filter.CsrfCustomFilter;
+import com.store.security.store_security.filter.JwtGeneratorFilter;
+import com.store.security.store_security.filter.JwtValidatorFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +16,6 @@ import org.springframework.security.authentication.password.CompromisedPasswordC
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -78,6 +78,8 @@ public class ConfigSecurityDev {
                                        ).permitAll());
         //set custom filter
         http.addFilterAfter(new CsrfCustomFilter(), BasicAuthenticationFilter.class);
+        http.addFilterAfter(new JwtGeneratorFilter(),BasicAuthenticationFilter.class);
+        http.addFilterBefore(new JwtValidatorFilter(),BasicAuthenticationFilter.class);
         http.headers(AbstractHttpConfigurer::disable); //H2
         http.cors(cors->cors.configurationSource(
                 new CorsConfigurationSource() {
@@ -89,6 +91,7 @@ public class ConfigSecurityDev {
                         cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE","PATCH"));
                         cors.setAllowCredentials(true);
                         cors.setAllowedHeaders(List.of("*"));
+                        cors.setExposedHeaders(List.of("Authorization"));
                         cors.setMaxAge(3600L);
                         return cors;
                     }

@@ -3,7 +3,7 @@ package com.store.security.store_security.security;
 import com.store.security.store_security.exceptionhandle.CustomAccessDeniedHandler;
 import com.store.security.store_security.exceptionhandle.CustomAuthenticationEntryPoint;
 import com.store.security.store_security.filter.CsrfCustomFilter;
-import com.store.security.store_security.filter.JwtGenertorFilter;
+import com.store.security.store_security.filter.JwtGeneratorFilter;
 import com.store.security.store_security.filter.JwtValidatorFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -16,18 +16,15 @@ import org.springframework.security.authentication.password.CompromisedPasswordC
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
-import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.security.web.session.SessionManagementFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -81,8 +78,8 @@ public class ConfigSecurity {
                                        ).permitAll());
         //set custom filter
         http.addFilterAfter(new CsrfCustomFilter(), BasicAuthenticationFilter.class);
-        http.addFilterBefore(new JwtGenertorFilter(),BasicAuthenticationFilter.class);
-        http.addFilterAfter(new JwtValidatorFilter(),BasicAuthenticationFilter.class);
+        http.addFilterAfter(new JwtGeneratorFilter(),BasicAuthenticationFilter.class);
+        http.addFilterBefore(new JwtValidatorFilter(),BasicAuthenticationFilter.class);
 
 
         http.cors(cors->cors.configurationSource(
@@ -95,6 +92,7 @@ public class ConfigSecurity {
                         cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE","PATCH"));
                         cors.setAllowCredentials(true);
                         cors.setAllowedHeaders(List.of("*"));
+                        cors.setExposedHeaders(List.of("Authorization"));
                         cors.setMaxAge(3600L);
                         return cors;
                     }
