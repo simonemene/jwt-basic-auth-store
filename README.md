@@ -1,10 +1,10 @@
-# 🛒 JWT BASIC AUTH STORE
+#  JWT BASIC AUTH STORE
 
 A demo project showcasing **Spring Security Basic Authentication combined with JWT (JSON Web Token)** for stateless authentication. This is a simple online store where users can register, authenticate, and purchase articles.
 
 ---
 
-## 🔐 Features
+##  Features
 
 - Basic Authentication with Spring Security
 - Token-based authentication with **JWT**
@@ -15,7 +15,7 @@ A demo project showcasing **Spring Security Basic Authentication combined with J
 
 ---
 
-## 👥 User Roles & Accounts
+##  User Roles & Accounts
 
 | Role  | Description                   | Email                | Password |
 |-------|-------------------------------|----------------------|----------|
@@ -25,7 +25,7 @@ A demo project showcasing **Spring Security Basic Authentication combined with J
 
 ---
 
-## 🧭 Overview
+##  Overview
 
 This project demonstrates a modern authentication flow using Spring Security with Basic Auth and JWT:
 
@@ -38,7 +38,7 @@ This approach avoids traditional session tracking (like `JSESSIONID`) and improv
 
 ---
 
-## ⚠️ Security Notice
+## Security Notice
 
 While Basic Auth is used to send credentials, it is **only used once** to obtain a JWT. The token is then used for further communication. However, keep in mind:
 
@@ -50,9 +50,9 @@ While Basic Auth is used to send credentials, it is **only used once** to obtain
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
-### ✅ Prerequisites
+###  Prerequisites
 
 - Java 17+
 - Maven or Gradle
@@ -61,7 +61,7 @@ While Basic Auth is used to send credentials, it is **only used once** to obtain
 
 ---
 
-### ▶️ Running the Application
+### Running the Application
 
 #### Option 1: Manual Run
 
@@ -87,13 +87,13 @@ npm install
 npm start
 ```
 
-🐳 Option 2: Docker Compose
+Option 2: Docker Compose
 
 If you have Docker and Docker Compose installed:
 
 docker compose up --build
 
-🤝 Contributing
+Contributing
 
 Feel free to open issues or submit pull requests if you have suggestions or improvements!
 
