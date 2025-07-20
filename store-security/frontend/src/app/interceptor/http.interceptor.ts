@@ -25,7 +25,7 @@ export const httpInterceptor: HttpInterceptorFn = (req, next) => {
      let authorization = sessionStorage.getItem('Authorization');
      if(authorization)
      {
-      httpHeaders = httpHeaders.append('Authorizionation',authorization);
+      httpHeaders = httpHeaders.append('Authorization',authorization);
      }
   }
 
