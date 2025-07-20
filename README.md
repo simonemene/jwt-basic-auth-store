@@ -1,57 +1,65 @@
-BASIC AUTH STORE
+- The backend validates the token and applies role-based access control
 
-A demo project showcasing Spring Security Basic Authentication using JSESSIONID for session management. This is a simple online store where users can register, authenticate, and purchase articles.
+This approach avoids traditional session tracking (like `JSESSIONID`) and improves scalability by using stateless authentication.
 
-Features
+---
 
-Basic Authentication with Spring Security
-Password hashing with BCrypt
-Custom AuthenticationProvider using database-backed user tables
-Three user roles with different privileges:
-USER: Registered customers
-ADMIN: Fixed admin account (admin@example.it / admin)
-TRACK: Responsible for order tracking (track@example.it / track)
-User Roles & Accounts
+## ⚠️ Security Notice
 
-Role	Description	Email	Password
-USER	Regular users who must register	-	-
-ADMIN	Administrator with full privileges	admin@example.it	admin
-TRACK	Order tracking operator	track@example.it	track
-Overview
+While Basic Auth is used to send credentials, it is **only used once** to obtain a JWT. The token is then used for further communication. However, keep in mind:
 
-This project demonstrates a basic authentication mechanism built with Spring Security, featuring:
+- Always use **HTTPS** in production
+- Store the token securely (e.g., in memory, or HttpOnly cookie if extended)
+- Implement **token expiration and refresh** for added security
 
-Secure password storage using BCrypt
-A custom authentication provider with user data stored in database tables
-Role-based access control using annotations (@PreAuthorize)
-Session management via JSESSIONID
-It serves as a foundational example for building authentication in real-world applications.
+> This is a demo project and **not production-ready**. For more robust security, consider implementing refresh tokens and using secure storage mechanisms.
 
-⚠️ Important Notes
-While Basic Authentication is still used for the initial login (sending credentials via HTTP headers), after successful authentication:
+---
 
-A JWT token is generated and returned to the client
-All subsequent requests must include the JWT in the Authorization header (e.g., Authorization: Bearer <token>)
-This approach ensures statelessness and is more scalable than traditional session-based login
+## 🚀 Getting Started
 
-Getting Started
+### ✅ Prerequisites
 
-Prerequisites
+- Java 17+
+- Maven or Gradle
+- A configured relational database (e.g., MySQL or H2)
+- Node.js & npm (for the frontend)
 
-Java 17+
-Maven or Gradle
-A configured relational database (MySQL, H2)
-Running the Application
+---
 
-Clone the repository:
+### ▶️ Running the Application
 
+#### Option 1: Manual Run
+
+```bash
+# Clone the repository
 git clone https://github.com/simonemene/basic-auth-store.git
-Run the Spring Boot backend: ./mvnw spring-boot:run Or, if Maven is installed globally: 'mvn spring-boot:run'
+cd basic-auth-store
+```
 
-Run the Angular frontend: Navigate to the frontend directory: cd frontend npm install npm start
+Run the Spring Boot backend:
 
-🐳 Option 2: Run with Docker Compose
+```bash
+./mvnw spring-boot:run
+# or, if Maven is installed globally
+mvn spring-boot:run
+```
 
-Make sure Docker and Docker Compose are installed. From the root of the project, run (docker-compose.yml): docker compose up --build
+Run the Angular frontend:
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+🐳 Option 2: Docker Compose
+
+If you have Docker and Docker Compose installed:
+
+docker compose up --build
+
+🤝 Contributing
 
 Feel free to open issues or submit pull requests if you have suggestions or improvements!
+
