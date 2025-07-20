@@ -1,3 +1,37 @@
+# 🛒 BASIC AUTH STORE
+
+A demo project showcasing **Spring Security Basic Authentication combined with JWT (JSON Web Token)** for stateless authentication. This is a simple online store where users can register, authenticate, and purchase articles.
+
+---
+
+## 🔐 Features
+
+- Basic Authentication with Spring Security
+- Token-based authentication with **JWT**
+- Password hashing using **BCrypt**
+- Custom `AuthenticationProvider` using a database-backed user table
+- Role-based access control with `@PreAuthorize`
+- Stateless session management (no JSESSIONID)
+
+---
+
+## 👥 User Roles & Accounts
+
+| Role  | Description                   | Email                | Password |
+|-------|-------------------------------|----------------------|----------|
+| USER  | Regular users (self-register) | -                    | -        |
+| ADMIN | Administrator                 | admin@example.it     | admin    |
+| TRACK | Order tracking operator       | track@example.it     | track    |
+
+---
+
+## 🧭 Overview
+
+This project demonstrates a modern authentication flow using Spring Security with Basic Auth and JWT:
+
+- Users authenticate via Basic Auth (email/password)
+- Upon successful login, a **JWT** is issued
+- All subsequent requests require the JWT in the `Authorization` header:
 - The backend validates the token and applies role-based access control
 
 This approach avoids traditional session tracking (like `JSESSIONID`) and improves scalability by using stateless authentication.
