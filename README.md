@@ -1,4 +1,4 @@
-# 🛒 BASIC AUTH STORE
+# 🛒 JWT BASIC AUTH STORE
 
 A demo project showcasing **Spring Security Basic Authentication combined with JWT (JSON Web Token)** for stateless authentication. This is a simple online store where users can register, authenticate, and purchase articles.
 
