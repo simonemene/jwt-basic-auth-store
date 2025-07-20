@@ -80,7 +80,6 @@ public class ConfigSecurityDev {
         http.addFilterAfter(new CsrfCustomFilter(), BasicAuthenticationFilter.class);
         http.addFilterAfter(new JwtGeneratorFilter(),BasicAuthenticationFilter.class);
         http.addFilterBefore(new JwtValidatorFilter(),BasicAuthenticationFilter.class);
-        http.headers(AbstractHttpConfigurer::disable); //H2
         http.cors(cors->cors.configurationSource(
                 new CorsConfigurationSource() {
                     @Override
