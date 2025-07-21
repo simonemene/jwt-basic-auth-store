@@ -1,6 +1,6 @@
 package com.store.security.store_security.filter;
 
-import com.store.security.store_security.constants.JwtConstants;
+import com.store.security.store_security.properties.StoreProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,17 +23,19 @@ import java.util.stream.Collectors;
 
 public class JwtGeneratorFilter extends OncePerRequestFilter {
 
+    private final StoreProperties storeProperties;
+
+    public JwtGeneratorFilter(StoreProperties storeProperties) {
+        this.storeProperties = storeProperties;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(null!= authentication)
         {
-          Environment environment = getEnvironment();
-          if(null != environment)
-          {
-            String secret = environment.getProperty(JwtConstants.JWT_SECRET_KEY_NAME,
-                    JwtConstants.JWT_SECRET_DEFAULT);
+            String secret = storeProperties.getJwtSecretKeyValue();
               SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
               String jwt = Jwts.builder().issuer("store-security")
                       .subject("JWT Token")
@@ -45,8 +47,8 @@ public class JwtGeneratorFilter extends OncePerRequestFilter {
                       .expiration(new Date((new Date().getTime() + 60000)))
                       .signWith(secretKey)
                       .compact();
-              response.setHeader(JwtConstants.JWT_HEADER,jwt);
-          }
+              response.setHeader(storeProperties.getJwtHeader(),jwt);
+
         }
         filterChain.doFilter(request,response);
     }

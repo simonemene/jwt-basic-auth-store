@@ -5,7 +5,9 @@ import com.store.security.store_security.exceptionhandle.CustomAuthenticationEnt
 import com.store.security.store_security.filter.CsrfCustomFilter;
 import com.store.security.store_security.filter.JwtGeneratorFilter;
 import com.store.security.store_security.filter.JwtValidatorFilter;
+import com.store.security.store_security.properties.StoreProperties;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,11 +34,11 @@ import java.util.List;
 
 @Slf4j
 @Configuration
+@AllArgsConstructor
 @Profile("dev")
 public class ConfigSecurityDev {
 
-    @Value("${store.security.allowed-origin}")
-    private String origin;
+    private final StoreProperties storeProperties;
 
     /**
      * Bean responsible for customizable Spring Security configurations
@@ -78,15 +80,15 @@ public class ConfigSecurityDev {
                                        ).permitAll());
         //set custom filter
         http.addFilterAfter(new CsrfCustomFilter(), BasicAuthenticationFilter.class);
-        http.addFilterAfter(new JwtGeneratorFilter(),BasicAuthenticationFilter.class);
-        http.addFilterBefore(new JwtValidatorFilter(),BasicAuthenticationFilter.class);
+        http.addFilterAfter(new JwtGeneratorFilter(storeProperties),BasicAuthenticationFilter.class);
+        http.addFilterBefore(new JwtValidatorFilter(storeProperties),BasicAuthenticationFilter.class);
         http.cors(cors->cors.configurationSource(
                 new CorsConfigurationSource() {
                     @Override
                     public CorsConfiguration getCorsConfiguration(
                             HttpServletRequest request) {
                         CorsConfiguration cors = new CorsConfiguration();
-                        cors.addAllowedOrigin(origin);
+                        cors.addAllowedOrigin(storeProperties.getSecurityAllowedOrigin());
                         cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE","PATCH"));
                         cors.setAllowCredentials(true);
                         cors.setAllowedHeaders(List.of("*"));

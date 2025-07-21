@@ -1,6 +1,6 @@
 package com.store.security.store_security.filter;
 
-import com.store.security.store_security.constants.JwtConstants;
+import com.store.security.store_security.properties.StoreProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -22,15 +22,19 @@ import java.nio.charset.StandardCharsets;
 
 public class JwtValidatorFilter extends OncePerRequestFilter {
 
-    @Override
+    private final StoreProperties storeProperties;
+
+	public JwtValidatorFilter(StoreProperties storeProperties) {
+		this.storeProperties = storeProperties;
+	}
+
+	@Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = request.getHeader("Authorization");
         if(null != jwt)
         {
             try{
-            Environment environment = getEnvironment();
-            String secret = environment.getProperty(JwtConstants.JWT_SECRET_KEY_NAME,
-                    JwtConstants.JWT_SECRET_DEFAULT);
+            String secret = storeProperties.getJwtSecretKeyValue();
             SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
             if(null != secretKey)
             {
@@ -40,7 +44,6 @@ public class JwtValidatorFilter extends OncePerRequestFilter {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                         username,null, AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
             }
             }catch(Exception e)
             {
