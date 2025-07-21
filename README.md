@@ -67,8 +67,8 @@ While Basic Auth is used to send credentials, it is **only used once** to obtain
 
 ```bash
 # Clone the repository
-git clone https://github.com/simonemene/basic-auth-store.git
-cd basic-auth-store
+git clone https://github.com/simonemene/jwt-basic-auth-store.git
+cd jwt-basic-auth-store
 ```
 
 Run the Spring Boot backend:
