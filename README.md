@@ -87,11 +87,15 @@ npm install
 npm start
 ```
 
-Option 2: Docker Compose
+🐳 Option 2: Run with Docker Compose
 
-If you have Docker and Docker Compose installed:
+Build the backend JAR file: cd backend ./mvnw clean package
 
-docker compose up --build
+Build the frontend production bundle: cd ../frontend npm install npm run build
+
+Start the application stack with Docker Compose: docker compose up --build
+
+This will build and start the backend, MySQL database, and frontend containers.
 
 Contributing
 
